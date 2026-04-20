@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0C0A09" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#FAFAF9" media="(prefers-color-scheme: light)">
+    <title>Somchi — Maxfiylik Siyosati | Privacy Policy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light mode — ilova AppColors bilan bir xil */
+            --bg: #FAFAF9;
+            --surface: #FFFFFF;
+            --surface-variant: #F5F5F4;
+            --border: #E7E5E4;
+            --border-strong: #D6D3D1;
+            --text-primary: #1C1917;
+            --text-secondary: #78716C;
+            --text-tertiary: #A8A29E;
+            --accent: #0D9488;
+            --accent-surface: #F0FDFA;
+            --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark mode — stone paleta */
+                --bg: #0C0A09;
+                --surface: #1C1917;
+                --surface-variant: #292524;
+                --border: #3A3530;
+                --border-strong: #44403C;
+                --text-primary: #FAFAF9;
+                --text-secondary: #C8C4BF;
+                --text-tertiary: #8A857F;
+                --accent: #2DD4BF;
+                --accent-surface: #042F2E;
+                --shadow: none;
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            padding: 0 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 0 64px;
+        }
+
+        /* Logo — Rubik font, ilova bilan bir xil */
+        .logo {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 28px;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        /* Segmented control (ilova stylida) */
+        .lang-switch {
+            display: inline-flex;
+            gap: 2px;
+            background: var(--surface-variant);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 28px;
+        }
+
+        .lang-switch button {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+            min-height: 36px;
+        }
+
+        .lang-switch button:hover {
+            color: var(--text-primary);
+        }
+
+        .lang-switch button.active {
+            background: var(--surface);
+            color: var(--accent);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        /* Section cards — ilova card stylida */
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        p, li {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        p strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        li { margin-bottom: 4px; }
+        li:last-child { margin-bottom: 0; }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        .footer {
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .hidden { display: none; }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            body { padding: 0 16px; }
+            .container { padding: 32px 0 48px; }
+            h1 { font-size: 24px; }
+            .section { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">Somchi</div>
+    <h1 id="page-title">Maxfiylik siyosati</h1>
+    <div class="subtitle" id="page-date">Kuchga kirgan sana: 2 aprel 2026</div>
+
+    <div class="lang-switch" role="tablist">
+        <button class="active" onclick="switchLang('uz', this)">O'zbekcha</button>
+        <button onclick="switchLang('en', this)">English</button>
+        <button onclick="switchLang('ru', this)">Русский</button>
+    </div>
+
+    <!-- O'ZBEK -->
+    <div id="lang-uz">
+        <div class="section">
+            <h2>1. Kirish</h2>
+            <p>Somchi ilovasi O'zbekiston Markaziy Banki (CBU) valyuta kurslarini ko'rsatish uchun mo'ljallangan bepul mobil ilova. Biz foydalanuvchilarimizning maxfiyligini hurmat qilamiz va himoya qilamiz.</p>
+        </div>
+        <div class="section">
+            <h2>2. Qanday ma'lumotlar yig'iladi</h2>
+            <p>Somchi ilovasi <strong>shaxsiy ma'lumotlarni yig'maydi</strong>. Ilova quyidagilarni faqat qurilmangizda (lokal) saqlaydi:</p>
+            <ul>
+                <li>Sevimli valyutalar ro'yxati</li>
+                <li>Tanlangan tema (yorug'/qorong'u)</li>
+                <li>Keshlanigan valyuta kurslari (oflayn ishlash uchun)</li>
+            </ul>
+            <p>Bu ma'lumotlar hech qachon serverga yuborilmaydi.</p>
+        </div>
+        <div class="section">
+            <h2>3. Tarmoq so'rovlari</h2>
+            <p>Ilova faqat quyidagi manbalarga ulanadi:</p>
+            <ul>
+                <li><strong>O'zbekiston Markaziy Banki API</strong> (cbu.uz) — valyuta kurslarini olish uchun</li>
+                <li><strong>Google AdMob</strong> — reklamalarni ko'rsatish uchun</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>4. Reklama</h2>
+            <p>Ilova Google AdMob xizmatidan foydalanadi. Google AdMob o'zining maxfiylik siyosatiga muvofiq reklama ko'rsatish uchun qurilma identifikatorlaridan foydalanishi mumkin. Batafsil: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Maxfiylik Siyosati</a>.</p>
+        </div>
+        <div class="section">
+            <h2>5. Bolalar maxfiyligi</h2>
+            <p>Ilova 13 yoshdan kichik bolalarga mo'ljallanmagan. Biz ataylab bolalardan shaxsiy ma'lumot yig'maymiz.</p>
+        </div>
+        <div class="section">
+            <h2>6. O'zgarishlar</h2>
+            <p>Ushbu maxfiylik siyosati vaqti-vaqti bilan yangilanishi mumkin. O'zgarishlar ushbu sahifada e'lon qilinadi.</p>
+        </div>
+        <div class="section">
+            <h2>7. Bog'lanish</h2>
+            <p>Savollar bo'lsa, biz bilan bog'laning: <a href="mailto:muhammadmirqobilov@gmail.com">muhammadmirqobilov@gmail.com</a></p>
+        </div>
+    </div>
+
+    <!-- ENGLISH -->
+    <div id="lang-en" class="hidden">
+        <div class="section">
+            <h2>1. Introduction</h2>
+            <p>Somchi is a free mobile application that displays currency exchange rates from the Central Bank of Uzbekistan (CBU). We respect and protect the privacy of our users.</p>
+        </div>
+        <div class="section">
+            <h2>2. Data Collection</h2>
+            <p>Somchi <strong>does not collect personal data</strong>. The app stores the following information locally on your device only:</p>
+            <ul>
+                <li>Favorite currencies list</li>
+                <li>Selected theme preference (light/dark)</li>
+                <li>Cached exchange rates (for offline access)</li>
+            </ul>
+            <p>This data is never sent to any server.</p>
+        </div>
+        <div class="section">
+            <h2>3. Network Requests</h2>
+            <p>The app connects only to the following services:</p>
+            <ul>
+                <li><strong>Central Bank of Uzbekistan API</strong> (cbu.uz) — to fetch exchange rates</li>
+                <li><strong>Google AdMob</strong> — to display advertisements</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>4. Advertising</h2>
+            <p>The app uses Google AdMob. Google AdMob may use device identifiers to serve ads according to its own privacy policy. See: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+        </div>
+        <div class="section">
+            <h2>5. Children's Privacy</h2>
+            <p>The app is not intended for children under 13. We do not knowingly collect personal information from children.</p>
+        </div>
+        <div class="section">
+            <h2>6. Changes</h2>
+            <p>This privacy policy may be updated from time to time. Changes will be posted on this page.</p>
+        </div>
+        <div class="section">
+            <h2>7. Contact</h2>
+            <p>If you have questions, contact us at: <a href="mailto:muhammadmirqobilov@gmail.com">muhammadmirqobilov@gmail.com</a></p>
+        </div>
+    </div>
+
+    <!-- RUSSIAN -->
+    <div id="lang-ru" class="hidden">
+        <div class="section">
+            <h2>1. Введение</h2>
+            <p>Somchi — бесплатное мобильное приложение для отображения курсов валют Центрального банка Узбекистана (ЦБУ). Мы уважаем и защищаем конфиденциальность наших пользователей.</p>
+        </div>
+        <div class="section">
+            <h2>2. Сбор данных</h2>
+            <p>Somchi <strong>не собирает персональные данные</strong>. Приложение хранит следующую информацию только локально на вашем устройстве:</p>
+            <ul>
+                <li>Список избранных валют</li>
+                <li>Выбранная тема (светлая/тёмная)</li>
+                <li>Кэшированные курсы валют (для офлайн-доступа)</li>
+            </ul>
+            <p>Эти данные никогда не отправляются на сервер.</p>
+        </div>
+        <div class="section">
+            <h2>3. Сетевые запросы</h2>
+            <p>Приложение подключается только к следующим сервисам:</p>
+            <ul>
+                <li><strong>API Центрального банка Узбекистана</strong> (cbu.uz) — для получения курсов валют</li>
+                <li><strong>Google AdMob</strong> — для показа рекламы</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>4. Реклама</h2>
+            <p>Приложение использует Google AdMob. Google AdMob может использовать идентификаторы устройства для показа рекламы в соответствии со своей политикой конфиденциальности. Подробнее: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Политика конфиденциальности Google</a>.</p>
+        </div>
+        <div class="section">
+            <h2>5. Конфиденциальность детей</h2>
+            <p>Приложение не предназначено для детей младше 13 лет. Мы сознательно не собираем личную информацию детей.</p>
+        </div>
+        <div class="section">
+            <h2>6. Изменения</h2>
+            <p>Данная политика конфиденциальности может обновляться. Изменения будут опубликованы на этой странице.</p>
+        </div>
+        <div class="section">
+            <h2>7. Контакты</h2>
+            <p>Если у вас есть вопросы, свяжитесь с нами: <a href="mailto:muhammadmirqobilov@gmail.com">muhammadmirqobilov@gmail.com</a></p>
+        </div>
+    </div>
+
+    <div class="footer" id="footer-text">© 2026 Somchi. Barcha huquqlar himoyalangan.</div>
+</div>
+
+<script>
+(function() {
+    var titles = {
+        uz: 'Maxfiylik siyosati',
+        en: 'Privacy Policy',
+        ru: 'Политика конфиденциальности'
+    };
+    var dates = {
+        uz: 'Kuchga kirgan sana: 2 aprel 2026',
+        en: 'Effective date: April 2, 2026',
+        ru: 'Дата вступления в силу: 2 апреля 2026'
+    };
+    var footers = {
+        uz: '© 2026 Somchi. Barcha huquqlar himoyalangan.',
+        en: '© 2026 Somchi. All rights reserved.',
+        ru: '© 2026 Somchi. Все права защищены.'
+    };
+
+    window.switchLang = function(lang, btn) {
+        var blocks = document.querySelectorAll('[id^="lang-"]');
+        for (var i = 0; i < blocks.length; i++) {
+            blocks[i].classList.add('hidden');
+        }
+        document.getElementById('lang-' + lang).classList.remove('hidden');
+        document.getElementById('page-title').textContent = titles[lang];
+        document.getElementById('page-date').textContent = dates[lang];
+        document.getElementById('footer-text').textContent = footers[lang];
+        document.documentElement.lang = lang;
+
+        var btns = document.querySelectorAll('.lang-switch button');
+        for (var j = 0; j < btns.length; j++) {
+            btns[j].classList.remove('active');
+        }
+        if (btn) btn.classList.add('active');
+    };
+})();
+</script>
+</body>
+</html>
