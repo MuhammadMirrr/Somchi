@@ -6,6 +6,7 @@ import 'app.dart';
 import 'data/services/ad_service.dart';
 import 'data/services/cbu_api_service.dart';
 import 'data/services/cache_service.dart';
+import 'data/services/push_notification_service.dart';
 import 'data/repositories/currency_repository.dart';
 import 'presentation/providers/currency_provider.dart';
 import 'presentation/providers/theme_provider.dart';
@@ -15,6 +16,8 @@ import 'presentation/providers/calculator_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await PushNotificationService.instance.init();
 
   await initializeDateFormatting();
 

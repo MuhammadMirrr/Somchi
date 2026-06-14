@@ -166,4 +166,26 @@ class CacheService {
       debugPrint('saveLanguageIndex xato: $e');
     }
   }
+
+  List<Map<String, dynamic>> getPriceAlerts() {
+    final raw = _prefs.getString(AppConstants.prefPriceAlerts);
+    if (raw == null) return [];
+
+    try {
+      final data = json.decode(raw);
+      if (data is! List) return [];
+      return data.whereType<Map<String, dynamic>>().toList();
+    } catch (e) {
+      debugPrint('getPriceAlerts parse xato: $e');
+      return [];
+    }
+  }
+
+  Future<void> savePriceAlerts(List<Map<String, dynamic>> alerts) async {
+    try {
+      await _prefs.setString(AppConstants.prefPriceAlerts, json.encode(alerts));
+    } catch (e) {
+      debugPrint('savePriceAlerts xato: $e');
+    }
+  }
 }

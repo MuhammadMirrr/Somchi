@@ -51,6 +51,7 @@ class AppConstants {
   static const String prefRewardedWatchTimestamps = 'rewarded_watch_timestamps';
   static const String prefFirstLaunchComplete = 'first_launch_complete';
   static const String prefLanguageIndex = 'language_index';
+  static const String prefPriceAlerts = 'price_alerts';
 
   // Rewarded ad limits
   static const int maxDailyRewardedWatches = 3;

@@ -6,6 +6,8 @@ import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/number_formatter.dart';
 import '../../data/models/currency.dart';
+import '../../data/models/price_alert.dart';
+import '../../data/services/push_notification_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/ad_free_provider.dart';
 import '../providers/currency_provider.dart';
@@ -203,6 +205,7 @@ class _CurrencyDetailScreenState extends State<CurrencyDetailScreen> {
                         diffPercent: currency.diffPercent,
                         isPositive: currency.isPositive,
                       ),
+                      const SizedBox(height: AppConstants.space20),
                     ],
                   ),
                 ),
@@ -262,6 +265,22 @@ class _CurrencyDetailScreenState extends State<CurrencyDetailScreen> {
                   ),
                 ),
               ],
+
+              const SliverToBoxAdapter(
+                child: SizedBox(height: AppConstants.space20),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.screenPaddingH,
+                  ),
+                  child: _buildPriceAlertCard(
+                    context,
+                    provider: provider,
+                    currency: currency,
+                  ),
+                ),
+              ),
 
               // ── Spacing ──
               const SliverToBoxAdapter(
@@ -464,6 +483,205 @@ class _CurrencyDetailScreenState extends State<CurrencyDetailScreen> {
                 ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPriceAlertCard(
+    BuildContext context, {
+    required CurrencyProvider provider,
+    required Currency currency,
+  }) {
+    final alert = provider.getPriceAlert(currency.code);
+    final isEnabled = alert?.isEnabled ?? false;
+
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.space16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppConstants.radiusL),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.notifications_active_outlined,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: AppConstants.space8),
+              Expanded(
+                child: Text(
+                  'Narx xabari',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Switch(
+                value: isEnabled,
+                onChanged: alert == null
+                    ? null
+                    : (value) {
+                        HapticFeedback.selectionClick();
+                        provider.togglePriceAlert(currency.code, value);
+                      },
+              ),
+            ],
+          ),
+          const SizedBox(height: AppConstants.space8),
+          Text(
+            alert == null
+                ? 'Quyidagi narxga yetganida xabar avtomatik boradi.'
+                : 'Belgilangan narx: ${NumberFormatter.formatRate(alert.targetRate)} so‘m',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: AppConstants.space4),
+          Text(
+            'Quyidagi narxga yetganida xabar avtomatik boradi.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: AppConstants.space14),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => _showPriceAlertDialog(
+                    context,
+                    provider: provider,
+                    currency: currency,
+                    alert: alert,
+                  ),
+                  icon: Icon(alert == null ? Icons.add_alert : Icons.edit_outlined),
+                  label: Text(alert == null ? 'Narx xabari qo‘shish' : 'Narx xabarini tahrirlash'),
+                ),
+              ),
+              if (alert != null) ...[
+                const SizedBox(width: AppConstants.space12),
+                IconButton.outlined(
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    provider.removePriceAlert(currency.code);
+                  },
+                  icon: const Icon(Icons.delete_outline),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showPriceAlertDialog(
+    BuildContext context, {
+    required CurrencyProvider provider,
+    required Currency currency,
+    PriceAlert? alert,
+  }) async {
+    final controller = TextEditingController(
+      text: alert?.targetRate.toStringAsFixed(2) ?? currency.rate.toStringAsFixed(2),
+    );
+    var isEnabled = alert?.isEnabled ?? true;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: AppConstants.screenPaddingH,
+            right: AppConstants.screenPaddingH,
+            top: AppConstants.space20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + AppConstants.space20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${currency.code} uchun narx xabari',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: AppConstants.space8),
+                  Text(
+                    'Hozirgi kurs: ${NumberFormatter.formatRate(currency.rate)} so‘m',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: AppConstants.space8),
+                  Text(
+                    'Quyidagi narxga yetganida xabar avtomatik boradi.',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: AppConstants.space16),
+                  TextField(
+                    controller: controller,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9\.]')),
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Belgilangan narx',
+                      hintText: 'Masalan: 12750.00',
+                    ),
+                  ),
+                  const SizedBox(height: AppConstants.space12),
+                  SwitchListTile.adaptive(
+                    value: isEnabled,
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Narx xabari faol bo‘lsin'),
+                    onChanged: (value) => setState(() => isEnabled = value),
+                  ),
+                  const SizedBox(height: AppConstants.space16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final targetRate = double.tryParse(controller.text.trim());
+                        if (targetRate == null || targetRate <= 0) return;
+
+                        final hasPermission =
+                            await PushNotificationService.instance
+                                .requestPermissionIfNeeded();
+                        if (!hasPermission) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Push xabarlarga ruxsat berilmasa alert ishlamaydi',
+                                ),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
+                        await provider.upsertPriceAlert(
+                          currencyCode: currency.code,
+                          targetRate: targetRate,
+                          isEnabled: isEnabled,
+                        );
+
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text('Saqlash'),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

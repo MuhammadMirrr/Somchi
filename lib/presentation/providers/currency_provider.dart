@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/exceptions.dart';
 import '../../data/models/currency.dart';
+import '../../data/models/price_alert.dart';
 import '../../data/models/rate_history.dart';
 import '../../data/repositories/currency_repository.dart';
 
@@ -36,6 +37,9 @@ class CurrencyProvider extends ChangeNotifier {
 
   List<String> _favorites = [];
   List<String> get favorites => _favorites;
+
+  List<PriceAlert> _priceAlerts = [];
+  List<PriceAlert> get priceAlerts => _priceAlerts;
 
   String _searchQuery = '';
   String get searchQuery => _searchQuery;
@@ -148,6 +152,7 @@ class CurrencyProvider extends ChangeNotifier {
 
   Future<void> init() async {
     _favorites = _repository.getFavorites();
+    _priceAlerts = _repository.getPriceAlerts();
     await loadRates(forceRefresh: true);
   }
 
@@ -255,6 +260,54 @@ class CurrencyProvider extends ChangeNotifier {
       notifyListeners();
       await _repository.saveFavorites(_favorites);
     }
+  }
+
+  PriceAlert? getPriceAlert(String currencyCode) {
+    try {
+      return _priceAlerts.firstWhere((alert) => alert.currencyCode == currencyCode);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool hasPriceAlert(String currencyCode) => getPriceAlert(currencyCode) != null;
+
+  Future<void> upsertPriceAlert({
+    required String currencyCode,
+    required double targetRate,
+    required bool isEnabled,
+  }) async {
+    final index = _priceAlerts.indexWhere((alert) => alert.currencyCode == currencyCode);
+    final alert = PriceAlert(
+      currencyCode: currencyCode,
+      targetRate: targetRate,
+      isEnabled: isEnabled,
+      createdAt: index >= 0 ? _priceAlerts[index].createdAt : DateTime.now(),
+    );
+
+    if (index >= 0) {
+      _priceAlerts[index] = alert;
+    } else {
+      _priceAlerts.add(alert);
+    }
+
+    notifyListeners();
+    await _repository.savePriceAlerts(_priceAlerts);
+  }
+
+  Future<void> removePriceAlert(String currencyCode) async {
+    _priceAlerts.removeWhere((alert) => alert.currencyCode == currencyCode);
+    notifyListeners();
+    await _repository.savePriceAlerts(_priceAlerts);
+  }
+
+  Future<void> togglePriceAlert(String currencyCode, bool isEnabled) async {
+    final index = _priceAlerts.indexWhere((alert) => alert.currencyCode == currencyCode);
+    if (index == -1) return;
+
+    _priceAlerts[index] = _priceAlerts[index].copyWith(isEnabled: isEnabled);
+    notifyListeners();
+    await _repository.savePriceAlerts(_priceAlerts);
   }
 
   Currency? getCurrencyByCode(String code) {

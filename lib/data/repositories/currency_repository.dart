@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/currency.dart';
+import '../models/price_alert.dart';
 import '../models/rate_history.dart';
 import '../services/cbu_api_service.dart';
 import '../services/cache_service.dart';
@@ -136,4 +137,18 @@ class CurrencyRepository {
 
   Future<void> saveLanguageIndex(int index) =>
       _cacheService.saveLanguageIndex(index);
+
+  List<PriceAlert> getPriceAlerts() {
+    return _cacheService
+        .getPriceAlerts()
+        .map(PriceAlert.fromJson)
+        .where((alert) => alert.currencyCode.isNotEmpty)
+        .toList();
+  }
+
+  Future<void> savePriceAlerts(List<PriceAlert> alerts) {
+    return _cacheService.savePriceAlerts(
+      alerts.map((alert) => alert.toJson()).toList(),
+    );
+  }
 }
