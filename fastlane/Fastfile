@@ -1,0 +1,231 @@
+default_platform(:ios)
+
+platform :ios do
+  def somchi_api_key
+    app_store_connect_api_key(
+      key_id: "Y2V5385KN2",
+      issuer_id: "b69effec-1aef-4317-953f-13c4bb806061",
+      key_filepath: File.expand_path("~/.appstoreconnect/private_keys/AuthKey_Y2V5385KN2.p8"),
+      duration: 1200,
+      in_house: false
+    )
+  end
+
+  desc "Bundle ID (App ID)ni Apple Developer portalida ro'yxatga olish"
+  lane :register_bundle_id do
+    somchi_api_key
+    existing = Spaceship::ConnectAPI::BundleId.find("com.uzbapps.somchi")
+    if existing
+      UI.success("Bundle ID allaqachon mavjud: #{existing.identifier} (id=#{existing.id})")
+    else
+      bid = Spaceship::ConnectAPI::BundleId.create(
+        name: "Valyutachi",
+        platform: "IOS",
+        identifier: "com.uzbapps.somchi"
+      )
+      UI.success("Bundle ID yaratildi: #{bid.identifier} (id=#{bid.id})")
+    end
+  end
+
+  desc "App Store Connect da Valyutachi app yozuvini yaratish (API key orqali, produce'siz)"
+  lane :create_app do
+    somchi_api_key
+    app = Spaceship::ConnectAPI::App.create(
+      name: "Valyutachi",
+      version_string: "1.2.0",
+      sku: "com.uzbapps.somchi",
+      primary_locale: "en-US",
+      bundle_id: "com.uzbapps.somchi",
+      platforms: ["IOS"]
+    )
+    UI.success("App yaratildi: id=#{app.id}")
+  end
+
+  desc "Valyutachi IPA ni App Store Connect ga yuklash"
+  lane :upload do
+    upload_to_app_store(
+      api_key: somchi_api_key,
+      ipa: "build/ios/ipa/Valyutachi.ipa",
+      skip_metadata: true,
+      skip_screenshots: true,
+      submit_for_review: false,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc "Diagnostika: shu hisobdagi barcha app yozuvlarini ko'rsatish"
+  lane :list_apps do
+    somchi_api_key
+    apps = Spaceship::ConnectAPI::App.all
+    apps.each do |a|
+      UI.message("#{a.name} | bundleId=#{a.bundleId} | id=#{a.id} | sku=#{a.sku}")
+    end
+  end
+
+  desc "Diagnostika: versiyaga biriktirilgan build holatini ko'rsatish"
+  lane :check_build do
+    somchi_api_key
+    app = Spaceship::ConnectAPI::App.find("com.uzbapps.somchi")
+    v = app.get_app_store_versions.first
+    UI.message("Versiya: #{v.version_string}, holat: #{v.app_store_state}")
+    build = v.get_build
+    if build
+      UI.message("Biriktirilgan build: #{build.version} (id=#{build.id}, processing=#{build.processing_state})")
+    else
+      UI.message("Versiyaga hech qanday build biriktirilmagan!")
+    end
+  end
+
+  desc "Faqat matn metadata'ni yuklash"
+  lane :metadata do
+    upload_to_app_store(
+      api_key: somchi_api_key,
+      app_identifier: "com.uzbapps.somchi",
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_metadata: false,
+      submit_for_review: false,
+      force: true,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc "Faqat screenshotlarni yuklash"
+  lane :screenshots do
+    upload_to_app_store(
+      api_key: somchi_api_key,
+      app_identifier: "com.uzbapps.somchi",
+      skip_binary_upload: true,
+      skip_screenshots: false,
+      skip_metadata: true,
+      overwrite_screenshots: true,
+      submit_for_review: false,
+      force: true,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc "Review uchun qolgan majburiy deklaratsiyalarni to'ldirish: yosh reytingi, kontent huquqi"
+  lane :fix_review_requirements do
+    somchi_api_key
+    app = Spaceship::ConnectAPI::App.find("com.uzbapps.somchi")
+
+    UI.message("Content rights declaration...")
+    app.update(attributes: { content_rights_declaration: "DOES_NOT_USE_THIRD_PARTY_CONTENT" })
+
+    UI.message("Yosh reytingi (hammasi NONE/false)...")
+    info = app.fetch_edit_app_info
+    decl = info.fetch_age_rating_declaration
+    decl.update(attributes: {
+      alcohol_tobacco_or_drug_use_or_references: "NONE",
+      contests: "NONE",
+      gambling_simulated: "NONE",
+      guns_or_other_weapons: "NONE",
+      horror_or_fear_themes: "NONE",
+      mature_or_suggestive_themes: "NONE",
+      medical_or_treatment_information: "NONE",
+      profanity_or_crude_humor: "NONE",
+      sexual_content_graphic_and_nudity: "NONE",
+      sexual_content_or_nudity: "NONE",
+      violence_cartoon_or_fantasy: "NONE",
+      violence_realistic_prolonged_graphic_or_sadistic: "NONE",
+      violence_realistic: "NONE",
+      # Bu build'da iOS uchun reklama o'chirilgan (AdMob iOS'da hali ro'yxatdan
+      # o'tmagan) — shu sabab hozircha false. Reklama qo'shilganda true qilib
+      # yangilash kerak.
+      advertising: false,
+      age_assurance: false,
+      gambling: false,
+      health_or_wellness_topics: false,
+      loot_box: false,
+      messaging_and_chat: false,
+      parental_controls: false,
+      unrestricted_web_access: false,
+      user_generated_content: false
+    })
+
+    UI.success("Tayyor: content rights va yosh reytingi yangilandi. Narx va App Privacy'ni qo'lda/API orqali to'ldiring.")
+  end
+
+  desc "Narxni Free (0.00 USD, barcha hududlarda) qilib belgilash"
+  lane :set_free_pricing do
+    somchi_api_key
+    require 'net/http'
+    require 'json'
+    token = Spaceship::ConnectAPI.token.text
+
+    api = ->(method, path, body = nil) {
+      uri = URI("https://api.appstoreconnect.apple.com#{path}")
+      req = method == :get ? Net::HTTP::Get.new(uri) : Net::HTTP::Post.new(uri)
+      req['Authorization'] = "Bearer #{token}"
+      req['Content-Type'] = 'application/json'
+      req.body = JSON.generate(body) if body
+      res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+      [res.code.to_i, (JSON.parse(res.body) rescue {})]
+    }
+
+    app_id_code, app_body = api.call(:get, "/v1/apps?filter[bundleId]=com.uzbapps.somchi")
+    app_id = app_body.dig("data", 0, "id")
+    UI.message("App id: #{app_id}")
+
+    code, body = api.call(:get, "/v1/apps/#{app_id}/appPricePoints?filter[territory]=USA&limit=50")
+    free_point = (body["data"] || []).find { |d| d.dig("attributes", "customerPrice").to_f == 0.0 }
+    raise "Free narx nuqtasi topilmadi: #{body}" unless free_point
+    UI.message("Free price point id: #{free_point['id']}")
+
+    payload = {
+      data: {
+        type: "appPriceSchedules",
+        relationships: {
+          app: { data: { type: "apps", id: app_id } },
+          baseTerritory: { data: { type: "territories", id: "USA" } },
+          manualPrices: {
+            data: [{ type: "appPrices", id: "${new_price}" }]
+          }
+        }
+      },
+      included: [
+        {
+          type: "appPrices",
+          id: "${new_price}",
+          attributes: { startDate: nil },
+          relationships: {
+            appPricePoint: { data: { type: "appPricePoints", id: free_point['id'] } }
+          }
+        }
+      ]
+    }
+    code, body = api.call(:post, "/v1/appPriceSchedules", payload)
+    UI.message("Price schedule create status: #{code}")
+    if code >= 200 && code < 300
+      UI.success("Narx Free qilib belgilandi!")
+    else
+      UI.error("Xato: #{JSON.pretty_generate(body)}")
+    end
+  end
+
+  desc "Tayyor versiyani Apple review'ga yuborish"
+  lane :submit do
+    upload_to_app_store(
+      api_key: somchi_api_key,
+      app_identifier: "com.uzbapps.somchi",
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_metadata: true,
+      submit_for_review: true,
+      automatic_release: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submission_information: {
+        # Bu build'da reklama o'chirilgan, shu sabab IDFA ishlatilmaydi.
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
+    )
+  end
+
+  # App Privacy (data usage javoblari) — Apple bu API'ni App Store Connect
+  # sayti bilan cheklab qo'ygan, faqat qo'lda: App Store Connect > App
+  # Privacy > Get Started > mos javoblar (Somchi reklama uchun advertising ID
+  # ishlatadi — AdMob) > Publish.
+end

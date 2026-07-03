@@ -52,3 +52,10 @@ app.*.map.json
 # OS
 Thumbs.db
 Desktop.ini
+
+# iOS CocoaPods (regenerate via `pod install`)
+/ios/Pods/
+
+# App Store Connect review contact info (personal, not public)
+/fastlane/metadata/review_information/
+fastlane/report.xml

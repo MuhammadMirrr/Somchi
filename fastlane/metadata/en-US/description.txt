@@ -1,0 +1,15 @@
+Valyutachi shows official currency exchange rates from the Central Bank of Uzbekistan (CBU), updated daily.
+
+FEATURES
+- Real-time rates for all currencies published by CBU, updated daily
+- Rate history chart for each currency
+- Built-in calculator: convert between any currency and the Uzbek so'm (UZS)
+- Favorites: pin the currencies you check most often
+- Search and sort by category (major currencies, metals, other), price, or daily change
+- Light, dark, and system themes
+- Trilingual interface: Uzbek (Latin and Cyrillic), Russian, English
+- Offline mode: last-known rates are cached and available without an internet connection
+
+Whether you're tracking USD, EUR, RUB, or any other currency against the so'm, Valyutachi gives you a fast, clean, ad-light way to check today's official rate and calculate conversions.
+
+Your privacy: Valyutachi does not collect or transmit personal data. Rate history, favorites, and settings stay on your device.

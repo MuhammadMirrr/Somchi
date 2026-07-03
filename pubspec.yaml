@@ -1,8 +1,8 @@
 name: somchi
-description: "Somchi — O'zbekiston so'mi uchun valyuta kurslari ilovasi"
+description: "Valyutachi — O'zbekiston so'mi uchun valyuta kurslari ilovasi"
 publish_to: 'none'
 
-version: 1.2.0+3
+version: 1.2.0+4
 
 environment:
   sdk: ^3.10.7
@@ -20,7 +20,6 @@ dependencies:
   google_fonts: ^6.2.1
   intl: ^0.20.2
   provider: ^6.1.2
-  google_mobile_ads: ^5.3.0
   shimmer: ^3.0.0
   url_launcher: ^6.3.1
   package_info_plus: ^8.1.1
@@ -36,7 +35,7 @@ dev_dependencies:
 
 flutter_launcher_icons:
   android: true
-  ios: false
+  ios: true
   image_path: "assets/images/logo.png"
   adaptive_icon_background: "#FAFAF9"
   adaptive_icon_foreground: "assets/images/logo.png"

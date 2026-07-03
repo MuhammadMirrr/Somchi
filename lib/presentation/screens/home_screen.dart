@@ -9,13 +9,11 @@ import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/currency.dart';
 import '../../l10n/app_localizations.dart';
-import '../providers/ad_free_provider.dart';
 import '../providers/currency_provider.dart';
 import '../widgets/hero_currency_card.dart';
 import '../widgets/currency_list_item.dart';
 import '../widgets/state_widgets.dart';
 import '../../app.dart';
-import '../widgets/inline_banner_ad.dart';
 import 'currency_detail_screen.dart';
 
 String _categoryLabel(AppLocalizations l10n, CurrencyCategory cat) {
@@ -179,17 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     else
                       _buildCurrencyList(context, provider, animateEntrance: animateEntrance),
-                    SliverToBoxAdapter(
-                      child: Consumer<AdFreeProvider>(
-                        builder: (context, adFree, _) {
-                          if (adFree.isAdFree) return const SizedBox.shrink();
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: InlineBannerAd(),
-                          );
-                        },
-                      ),
-                    ),
                     const SliverToBoxAdapter(
                       child: SizedBox(height: 80),
                     ),

@@ -9,10 +9,8 @@ import '../../data/models/currency.dart';
 import '../../data/models/price_alert.dart';
 import '../../data/services/push_notification_service.dart';
 import '../../l10n/app_localizations.dart';
-import '../providers/ad_free_provider.dart';
 import '../providers/currency_provider.dart';
 import '../widgets/currency_history_chart.dart';
-import '../widgets/inline_banner_ad.dart';
 import '../widgets/animated_rate.dart';
 import '../widgets/rate_diff_badge.dart';
 import '../widgets/segmented_control.dart';
@@ -285,19 +283,6 @@ class _CurrencyDetailScreenState extends State<CurrencyDetailScreen> {
               // ── Spacing ──
               const SliverToBoxAdapter(
                 child: SizedBox(height: AppConstants.space24),
-              ),
-
-              // ── Banner ad ──
-              SliverToBoxAdapter(
-                child: Consumer<AdFreeProvider>(
-                  builder: (context, adFree, _) {
-                    if (adFree.isAdFree) return const SizedBox.shrink();
-                    return const Padding(
-                      padding: EdgeInsets.only(bottom: AppConstants.space24),
-                      child: InlineBannerAd(),
-                    );
-                  },
-                ),
               ),
 
               // ── Quick actions ──

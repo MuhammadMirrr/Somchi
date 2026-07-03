@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:somchi/core/constants/app_constants.dart';
 import 'package:somchi/core/theme/app_colors.dart';
 import 'package:somchi/core/theme/app_theme.dart';
-import 'package:somchi/data/services/ad_service.dart';
 import 'package:somchi/l10n/app_localizations.dart';
-import 'package:somchi/presentation/providers/ad_free_provider.dart';
 import 'package:somchi/presentation/providers/currency_provider.dart';
 import 'package:somchi/presentation/providers/language_provider.dart';
 import 'package:somchi/presentation/providers/theme_provider.dart';
@@ -86,14 +84,6 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Birinchi ochilishda app open ad ko'rsatish (faqat 1 marta, ad-free bo'lmasa)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final adFree = context.read<AdFreeProvider>();
-      if (!adFree.isAdFree) {
-        AdService.instance.showAppOpenAdIfAvailable();
-      }
-    });
   }
 
   @override
@@ -107,7 +97,6 @@ class MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     if (state != AppLifecycleState.resumed) return;
     if (!mounted) return;
 
-    context.read<AdFreeProvider>().refresh();
     final provider = context.read<CurrencyProvider>();
     final lastUpdated = provider.lastUpdated;
     if (lastUpdated == null ||

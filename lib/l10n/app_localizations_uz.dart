@@ -9,7 +9,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get appName => 'Somchi';
+  String get appName => 'Valyutachi';
 
   @override
   String get appTagline => 'Valyuta kurslari';
@@ -495,7 +495,7 @@ class AppLocalizationsUzCyrl extends AppLocalizationsUz {
   AppLocalizationsUzCyrl() : super('uz_Cyrl');
 
   @override
-  String get appName => 'Somchi';
+  String get appName => 'Valyutachi';
 
   @override
   String get appTagline => 'Валюта курслари';

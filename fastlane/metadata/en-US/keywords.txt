@@ -1,0 +1,1 @@
+currency,exchange rate,uzbekistan,som,cbu,converter,finance,valyuta,kurs,dollar,euro,ruble

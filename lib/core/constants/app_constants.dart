@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 class AppConstants {
   AppConstants._();
 
-  static const String appName = 'Somchi';
+  static const String appName = 'Valyutachi';
 
   // UZS (O'zbekiston so'mi)
   static const String uzsCode = 'UZS';

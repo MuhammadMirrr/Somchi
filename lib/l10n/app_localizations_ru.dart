@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appName => 'Somchi';
+  String get appName => 'Valyutachi';
 
   @override
   String get appTagline => 'Курсы валют';

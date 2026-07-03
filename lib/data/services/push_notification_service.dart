@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -22,7 +23,13 @@ class PushNotificationService {
     await Firebase.initializeApp();
   }
 
+  /// iOS uchun hali Firebase'da iOS app ro'yxatdan o'tkazilmagan
+  /// (GoogleService-Info.plist yo'q) — shu sabab iOS'da push bildirishnoma
+  /// butunlay o'chirilgan.
+  bool get _pushSupported => !Platform.isIOS;
+
   Future<void> init() async {
+    if (!_pushSupported) return;
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 

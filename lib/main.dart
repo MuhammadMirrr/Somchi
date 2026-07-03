@@ -3,7 +3,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
-import 'data/services/ad_service.dart';
 import 'data/services/cbu_api_service.dart';
 import 'data/services/cache_service.dart';
 import 'data/services/push_notification_service.dart';
@@ -11,7 +10,6 @@ import 'data/repositories/currency_repository.dart';
 import 'presentation/providers/currency_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/providers/language_provider.dart';
-import 'presentation/providers/ad_free_provider.dart';
 import 'presentation/providers/calculator_provider.dart';
 
 void main() async {
@@ -22,7 +20,6 @@ void main() async {
   await initializeDateFormatting();
 
   final prefs = await SharedPreferences.getInstance();
-  await AdService.instance.init(prefs);
 
   final apiService = CbuApiService();
   final cacheService = CacheService(prefs);
@@ -51,9 +48,6 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => CalculatorProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => AdFreeProvider(prefs),
         ),
       ],
       child: const SomchiApp(),

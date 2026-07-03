@@ -104,7 +104,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In uz, this message translates to:
-  /// **'Somchi'**
+  /// **'Valyutachi'**
   String get appName;
 
   /// No description provided for @appTagline.

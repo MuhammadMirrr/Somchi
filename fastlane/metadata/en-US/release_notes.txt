@@ -1,0 +1,1 @@
+Initial release of Valyutachi for iOS: official CBU currency exchange rates, rate history charts, and a built-in calculator.
