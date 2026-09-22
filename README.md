@@ -145,7 +145,8 @@ Licensed under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for d
 
 ## Developer
 
-**Muhammad Mirqobilov**
+**Muhammad Mirqobilov** (pasportda Mirkabilov)
+- Sayt: [mirqobilov.com/about](https://mirqobilov.com/about)
 - Telegram: [@mirqobilov_mm](https://t.me/mirqobilov_mm)
 - LinkedIn: [muhammad-mirqobilov](https://www.linkedin.com/in/muhammad-mirqobilov-97056034b/)
 - Email: muhammadmirqobilov@gmail.com
